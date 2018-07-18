@@ -35,7 +35,6 @@ E['valueColorUpdateFuncs'][ValueColorUpdate] = true
 local events = {
 	"UNIT_STATS",
 	"UNIT_AURA",
-	"FORGE_MASTER_ITEM_CHANGED",
 	"ACTIVE_TALENT_GROUP_CHANGED",
 	"PLAYER_TALENT_UPDATE",
 }
