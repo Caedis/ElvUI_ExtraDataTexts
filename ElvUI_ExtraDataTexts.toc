@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: |cff1784d1ElvUI |rExtraDataTexts
 ## Author: Caedis
 ## URL: http://www.tukui.org/forums/topic.php?id=66
