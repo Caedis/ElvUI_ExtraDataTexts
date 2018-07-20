@@ -2,7 +2,7 @@
 ## Title: |cff1784d1ElvUI |rExtraDataTexts
 ## Author: Caedis
 ## URL: http://www.tukui.org/forums/topic.php?id=66
-## Version: 1.5.1
+## Version: 1.6
 ## RequiredDeps: ElvUI
 ## DefaultState: Enabled
 ## LoadOnDemand: 0

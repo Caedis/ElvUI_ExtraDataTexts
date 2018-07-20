@@ -237,7 +237,6 @@ E['valueColorUpdateFuncs'][ValueColorUpdate] = true
 
 
 local events = {
-	"PLAYER_LOG_IN",
 	'PLAYER_ENTERING_WORLD',
 	"PLAYER_XP_UPDATE",
 	"PLAYER_UPDATE_RESTING",
