@@ -2,11 +2,13 @@
 ## Title: |cff1784d1ElvUI |rExtraDataTexts
 ## Author: Caedis
 ## URL: http://www.tukui.org/forums/topic.php?id=66
-## Version: 1.6
+## Version: 1.7
 ## RequiredDeps: ElvUI
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 
+Core.lua
 oUFTags\load_ouftags.xml
 Datatexts\load_datatexts.xml
 Datatexts\stats\load_stats.xml
+Misc\load_misc.xml
