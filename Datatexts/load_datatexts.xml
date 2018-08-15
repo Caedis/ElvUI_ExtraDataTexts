@@ -12,5 +12,6 @@
 <Script file='NodeCount.lua'/>
 <Script file='CombatIndicator.lua'/>
 <Script file='iLvl.lua'/>
-<Script file='Artifact.lua'/>
+<!-- <Script file='Artifact.lua'/> -->
+<Script file='HeartOfAzeroth.lua'/>
 </Ui>
