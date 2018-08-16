@@ -7,6 +7,7 @@ local function OnEvent(self, event, unit)
 		local name, _, subgroup = GetRaidRosterInfo(i)
 		if name == UnitName("player") then
 			self.text:SetFormattedText("Raid Group: %d", subgroup)
+			return
 		end
 	end
 end

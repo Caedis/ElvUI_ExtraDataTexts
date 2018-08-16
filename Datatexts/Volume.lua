@@ -114,7 +114,7 @@ local function OnEvent(self, event, ...)
 			setCV(activeVolume.Volume.CVar, vol)
 			self.text:SetText(activeVolume.Name..": "..strform("%.f", vol * 100) .. "%")
 		end)
-
+		
 	end
 	
 	self.text:SetText(activeVolume.Name..": "..strform("%.f", activeVolume.Volume.Value * 100) .. "%")
