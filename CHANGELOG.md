@@ -1,4 +1,4 @@
-### Version 2.01 [ March/ ]
+### Version 2.01 [ March/16th/2019 ]
 
 **New Additions:**  
 This changelog
