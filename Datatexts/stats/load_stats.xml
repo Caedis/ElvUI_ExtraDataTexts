@@ -1,8 +1,0 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">	
-<Script file='PrimaryStat.lua'/>
-<Script file='Agility.lua'/>
-<Script file='Intellect.lua'/>
-<Script file='Stamina.lua'/>
-<Script file='Strength.lua'/>
-<Script file='EnergyRegen.lua'/>
-</Ui>

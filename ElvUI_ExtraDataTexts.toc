@@ -9,4 +9,3 @@
 
 oUFTags\load_ouftags.xml
 Datatexts\load_datatexts.xml
-Datatexts\stats\load_stats.xml
