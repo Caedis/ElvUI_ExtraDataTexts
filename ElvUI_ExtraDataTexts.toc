@@ -1,8 +1,8 @@
-## Interface: 80100
+## Interface: 90002
 ## Title: |cff1784d1ElvUI |rExtraDataTexts
 ## Author: Caedis
 ## URL: http://www.tukui.org/forums/topic.php?id=66
-## Version: 2.01
+## Version: 2.1
 ## RequiredDeps: ElvUI
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
