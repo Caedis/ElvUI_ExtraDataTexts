@@ -2,7 +2,6 @@
 <Script file='Avoidance.lua'/>
 <Script file='CombatIndicator.lua'/>
 <Script file='ExpRep.lua'/>
-<Script file='HeartOfAzeroth.lua'/>
 <Script file='ILvl.lua'/>
 <Script file='Mail.lua'/>
 <Script file='NodeCount.lua'/>
