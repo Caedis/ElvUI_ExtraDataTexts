@@ -123,19 +123,6 @@ end
 
 
 
-local function OnEnter(self)
-	DT:SetupTooltip(self)	
-	local tip = DT.tooltip;	
-	
-	
-	
-	
-	tip:AddDoubleLine("Test", "Test 2", 1, 1, 1, 1, 1, 1)
-
-	--DT.tooltip:Show()
-	
-end
-
 local function OnClick(self)
 	activeVolumeIndex = activeVolumeIndex + 1
 	if (activeVolumeIndex == 6) then
@@ -162,5 +149,5 @@ end
 ]]
 
 
-DT:RegisterDatatext('Volume', {'PLAYER_ENTERING_WORLD', "CVAR_UPDATE"}, OnEvent, nil, OnClick, OnEnter, nil)
+DT:RegisterDatatext('Volume', {'PLAYER_ENTERING_WORLD', "CVAR_UPDATE"}, OnEvent, nil, OnClick, nil, nil)
 
