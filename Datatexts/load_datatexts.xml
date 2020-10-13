@@ -1,12 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-<Script file='Avoidance.lua'/>
 <Script file='CombatIndicator.lua'/>
 <Script file='ExpRep.lua'/>
-<Script file='ILvl.lua'/>
-<Script file='Mail.lua'/>
 <Script file='NodeCount.lua'/>
-<Script file='Played.lua'/>
 <Script file='RaidGroup.lua'/>
+<Script file='TimePlayed.lua'/>
 <Script file='Volume.lua'/>
 <Script file='Warmode.lua'/>
 </Ui>
