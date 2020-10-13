@@ -1,3 +1,5 @@
+-- Credit to Repooc and Darth Predator for this datatext from S&L
+
 local E, L, V, P, G, _ = unpack(ElvUI);
 local DT = E:GetModule('DataTexts')
 
@@ -16,8 +18,7 @@ local OnEnter = function(self)
 		local TotalDay, TotalHour, TotalMinute, TotalSecond = ChatFrame_TimeBreakDown(TotalPlayTime + (GetTime() - SessionPlayTime))
 		local LevelDay, LevelHour, LevelMinute, LevelSecond = ChatFrame_TimeBreakDown(LevelPlayTime + (GetTime() - LevelPlayTimeOffset))
 		local LastLevelDay, LastLevelHour, LastLevelMinute, LastLevelSecond = ChatFrame_TimeBreakDown(LastLevelTime)
-		--local Panel, Anchor, xOff, yOff = self:GetTooltipAnchor()
-		--DT.tooltip:SetOwner(Panel, Anchor, xOff, yOff)
+
 		DT.tooltip:ClearLines()
 		DT.tooltip:AddLine('Time Played', 1, 1, 1)
 		DT.tooltip:AddLine(' ')
@@ -26,7 +27,6 @@ local OnEnter = function(self)
 			DT.tooltip:AddDoubleLine(format('%s %s:', PREVIOUS, LEVEL), LastLevelDay > 0 and format(PlayedTimeFormatFull, LastLevelDay. LastLevelHour, LastLevelMinute, LastLevelSecond) or format(PlayedTimeFormatNoDay, LastLevelHour, LastLevelMinute, LastLevelSecond), 1, 1, 1, 1, 1, 1)
 		end
 		DT.tooltip:AddDoubleLine(LEVEL..':', LevelDay > 0 and format(PlayedTimeFormatFull, LevelDay, LevelHour, LevelMinute, LevelSecond) or format(PlayedTimeFormatNoDay, LevelHour, LevelMinute, LevelSecond), 1, 1, 1, 1, 1, 1)
-		--DT.tooltip:AddDoubleLine(LEVEL..':', LevelDay > 0 and format(PlayedTimeFormatFull, LevelDay. LevelHour, LevelMinute, LevelSecond) or format(PlayedTimeFormatNoDay, LevelHour, LevelMinute, LevelSecond), 1, 1, 1, 1, 1, 1)
 		DT.tooltip:AddDoubleLine(TOTAL..':', TotalDay > 0 and format(PlayedTimeFormatFull, TotalDay, TotalHour, TotalMinute, TotalSecond) or format(PlayedTimeFormatNoDay, TotalHour, TotalMinute, TotalSecond), 1, 1, 1, 1, 1, 1)
 		DT.tooltip:AddLine(' ')
 		DT.tooltip:AddLine('Account Time Played', 1, 1, 1)
