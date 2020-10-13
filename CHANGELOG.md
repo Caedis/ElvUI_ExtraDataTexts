@@ -1,8 +1,8 @@
-### Version 2.01 [ March/16th/2019 ]
+### Version 2.1 [ October/13th/2020 ]
 
 **New Additions:**  
-This changelog
 
 **Bug Fixes:**  
 
-**Misc. Changes:**  
+**Misc. Changes:**
+Removed datatexts that have been implemented into ElvUI
