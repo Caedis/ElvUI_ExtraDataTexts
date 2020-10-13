@@ -12,7 +12,7 @@ local join = string.join
 
 local xp, lvl, xpmax, restxp, percentXP, percentRest
 local rep, replvlmax, repStandingID, repstatus, watchedFaction
-local bonusRep, bonusFaction, bonusStatus, bonusStandingID, bonusMax, bonusMin
+local bonusRep, bonusStatus, bonusStandingID, bonusMax, bonusMin
 
 local chosen
 
@@ -98,18 +98,6 @@ local function OnEvent(self, event, ...)
 		percentRepStr = "---"
 	end
 	
-	if UnitLevel("player") == MAX_PLAYER_LEVEL then
-		if GetLFGBonusFactionID() ~= nil then
-			local name, _, id, bonusmin, bonusmax, bonusvalue, _, _, _, _, _, _, _ = GetFactionInfoByID(GetLFGBonusFactionID())		
-			bonusFaction = name;			
-		else		
-			bonusFaction = "Bonus Faction Not Set"
-			bonusRep = 0
-		end
-		
-		
-	end
-	
 	local repStandingColor = {0.9, 0.9, 0.9}
 	if watchedFaction then
 		repStandingColor = {FACTION_BAR_COLORS[repStandingID].r, FACTION_BAR_COLORS[repStandingID].g, FACTION_BAR_COLORS[repStandingID].b}
@@ -173,17 +161,6 @@ local function OnEnter(self)
 	DT:SetupTooltip(self)	
 	local tip = DT.tooltip;	
 	
-
-	--CreateSB(tip)
-    --
-	--if UnitLevel("player") < MAX_PLAYER_LEVEL then
-	--	sb:SetValue(xp)
-	--else
-	--	sb:SetValue(rep)
-	--end
-
-
-	
 	if UnitLevel("player") < MAX_PLAYER_LEVEL then
 	
 		if IsXPUserDisabled() then
@@ -214,13 +191,6 @@ local function OnEnter(self)
 	tip:AddDoubleLine(STATUS, repstatus, 0.9, 0.9, 0.9, repStandingColor[1], repStandingColor[2], repStandingColor[3])
 	tip:AddDoubleLine(L["Current"], shortnum(rep), 0.9, 0.9, 0.9, 0.9, 0.9, 0.9)
 	tip:AddDoubleLine(L["Remaining"], shortnum(replvlmax - rep), 0.9, 0.9, 0.9, 0.9, 0.9, 0.9)
-	
-	if UnitLevel("player") == MAX_PLAYER_LEVEL then
-		tip:AddLine(" ");
-		tip:AddLine(L["Bonus Reputation"])
-		
-		tip:AddDoubleLine(FACTION, bonusFaction, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9)
-	end
 
 	DT.tooltip:Show()
 	
