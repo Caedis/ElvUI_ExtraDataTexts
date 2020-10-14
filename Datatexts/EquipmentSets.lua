@@ -20,43 +20,6 @@ local db = {}
 local activeSetIndex
 local setMenu = {}
 
-local function RefreshCache()
-    twipe(db)
-    twipe(setMenu)
-    tinsert(setMenu, { text = 'Equipment Sets', isTitle = true, notCheckable = true })
-    
-
-    local sets = C_EquipmentSet_GetEquipmentSetIDs()
-
-    activeSetIndex = -1
-    for i,setID in pairs(sets) do
-        local name, iconFileID, _, isEquipped = C_EquipmentSet_GetEquipmentSetInfo(setID)
-        
-        tinsert(setMenu,
-            {
-                text = format('|T%s:14:14:0:0:64:64:4:60:4:60|t  %s', iconFileID, name),
-                checked = isEquipped,
-                func = function() C_EquipmentSet_UseEquipmentSet(setID) end
-            }
-        )
-
-        tinsert(db, 
-            {
-                SetID = setID,
-                Name = name,
-                IconFileID = iconFileID,
-                IsEquipped = isEquipped
-            }
-        )
-
-        if isEquipped then
-            activeSetIndex = i
-        end
-    end
-
-end
-
-
 local function OnEnter(self)
     E:UIFrameFadeIn(self, 0.4, self:GetAlpha(), 1)
 
@@ -103,7 +66,38 @@ local function OnEvent(self, event, ...)
         self:UnregisterEvent(event)
     end
     
-    RefreshCache()
+    twipe(db)
+    twipe(setMenu)
+    tinsert(setMenu, { text = 'Equipment Sets', isTitle = true, notCheckable = true })
+    
+
+    local sets = C_EquipmentSet_GetEquipmentSetIDs()
+
+    activeSetIndex = -1
+    for i,setID in pairs(sets) do
+        local name, iconFileID, _, isEquipped = C_EquipmentSet_GetEquipmentSetInfo(setID)
+        
+        tinsert(setMenu,
+            {
+                text = format('|T%s:14:14:0:0:64:64:4:60:4:60|t  %s', iconFileID, name),
+                checked = isEquipped,
+                func = function() C_EquipmentSet_UseEquipmentSet(setID) end
+            }
+        )
+
+        tinsert(db, 
+            {
+                SetID = setID,
+                Name = name,
+                IconFileID = iconFileID,
+                IsEquipped = isEquipped
+            }
+        )
+
+        if isEquipped then
+            activeSetIndex = i
+        end
+    end
     
     if activeSetIndex == -1 then
         self.text:SetText('No Set Equipped')
