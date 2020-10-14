@@ -21,90 +21,90 @@ local activeSetIndex
 local setMenu = {}
 
 local function OnEnter(self)
-    E:UIFrameFadeIn(self, 0.4, self:GetAlpha(), 1)
+	E:UIFrameFadeIn(self, 0.4, self:GetAlpha(), 1)
 
-    DT:SetupTooltip(self)
-    DT.tooltip:ClearLines()
+	DT:SetupTooltip(self)
+	DT.tooltip:ClearLines()
 
-    DT.tooltip:AddLine('Equipment Sets')
+	DT.tooltip:AddLine('Equipment Sets')
 
-    DT.tooltip:AddLine(' ')
+	DT.tooltip:AddLine(' ')
 
-    for _,set in pairs(db) do
-        DT.tooltip:AddLine(format('|T%s:14:14:0:0:64:64:4:60:4:60|t |cFF%s%s|r', set.IconFileID, set.IsEquipped and '00ff00' or 'ff0000', set.Name))
-    end
+	for _,set in pairs(db) do
+		DT.tooltip:AddLine(format('|T%s:14:14:0:0:64:64:4:60:4:60|t |cFF%s%s|r', set.IconFileID, set.IsEquipped and '00ff00' or 'ff0000', set.Name))
+	end
 
-    DT.tooltip:AddLine(' ')
+	DT.tooltip:AddLine(' ')
 
-    DT.tooltip:AddLine('|cffFFFFFFLeft Click:|r Equipment Set Dropdown')
-    DT.tooltip:AddLine('|cffFFFFFFShift + Left Click:|r Open Equipment Manager')
+	DT.tooltip:AddLine('|cffFFFFFFLeft Click:|r Equipment Set Dropdown')
+	DT.tooltip:AddLine('|cffFFFFFFShift + Left Click:|r Open Equipment Manager')
 
-    DT.tooltip:Show()
+	DT.tooltip:Show()
 end
 
 function OnClick(self, button)
-    if button == "LeftButton" then
-        if IsShiftKeyDown() then
-            ToggleCharacter('PaperDollFrame')
+	if button == "LeftButton" then
+		if IsShiftKeyDown() then
+			ToggleCharacter('PaperDollFrame')
 
-            if PaperDollSidebarTab3 then -- just in case something happens to this tab
-                PaperDollSidebarTab3:Click()
-            end
+			if PaperDollSidebarTab3 then -- just in case something happens to this tab
+				PaperDollSidebarTab3:Click()
+			end
 
-            return
-        end
+			return
+		end
 
-        DT:SetEasyMenuAnchor(DT.EasyMenu, self)
+		DT:SetEasyMenuAnchor(DT.EasyMenu, self)
 		_G.EasyMenu(setMenu, DT.EasyMenu, nil, nil, nil, 'MENU')
 
-    end
-    
+	end
+	
 end
 
 local function OnEvent(self, event, ...)
-    if event == 'PLAYER_ENTERING_WORLD' then
-        self:UnregisterEvent(event)
-    end
-    
-    twipe(db)
-    twipe(setMenu)
-    tinsert(setMenu, { text = 'Equipment Sets', isTitle = true, notCheckable = true })
-    
+	if event == 'PLAYER_ENTERING_WORLD' then
+		self:UnregisterEvent(event)
+	end
+	
+	twipe(db)
+	twipe(setMenu)
+	tinsert(setMenu, { text = 'Equipment Sets', isTitle = true, notCheckable = true })
+	
 
-    local sets = C_EquipmentSet_GetEquipmentSetIDs()
+	local sets = C_EquipmentSet_GetEquipmentSetIDs()
 
-    activeSetIndex = -1
-    for i,setID in pairs(sets) do
-        local name, iconFileID, _, isEquipped = C_EquipmentSet_GetEquipmentSetInfo(setID)
-        
-        tinsert(setMenu,
-            {
-                text = format('|T%s:14:14:0:0:64:64:4:60:4:60|t  %s', iconFileID, name),
-                checked = isEquipped,
-                func = function() C_EquipmentSet_UseEquipmentSet(setID) end
-            }
-        )
+	activeSetIndex = -1
+	for i,setID in pairs(sets) do
+		local name, iconFileID, _, isEquipped = C_EquipmentSet_GetEquipmentSetInfo(setID)
+		
+		tinsert(setMenu,
+			{
+				text = format('|T%s:14:14:0:0:64:64:4:60:4:60|t  %s', iconFileID, name),
+				checked = isEquipped,
+				func = function() C_EquipmentSet_UseEquipmentSet(setID) end
+			}
+		)
 
-        tinsert(db, 
-            {
-                SetID = setID,
-                Name = name,
-                IconFileID = iconFileID,
-                IsEquipped = isEquipped
-            }
-        )
+		tinsert(db, 
+			{
+				SetID = setID,
+				Name = name,
+				IconFileID = iconFileID,
+				IsEquipped = isEquipped
+			}
+		)
 
-        if isEquipped then
-            activeSetIndex = i
-        end
-    end
-    
-    if activeSetIndex == -1 then
-        self.text:SetText('No Set Equipped')
-    else
-        local set = db[activeSetIndex]
-        self.text:SetText(format('Set: %s |T%s:16:16:0:0:64:64:4:60:4:60|t', set.Name, set.IconFileID))
-    end
+		if isEquipped then
+			activeSetIndex = i
+		end
+	end
+	
+	if activeSetIndex == -1 then
+		self.text:SetText('No Set Equipped')
+	else
+		local set = db[activeSetIndex]
+		self.text:SetText(format('Set: %s |T%s:16:16:0:0:64:64:4:60:4:60|t', set.Name, set.IconFileID))
+	end
 
 end
 
@@ -117,11 +117,11 @@ end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
 local events = {
-    'PLAYER_ENTERING_WORLD',
-    'ELVUI_FORCE_UPDATE',
-    'EQUIPMENT_SETS_CHANGED',
-    'PLAYER_EQUIPMENT_CHANGED',
-    'EQUIPMENT_SWAP_FINISHED'
+	'PLAYER_ENTERING_WORLD',
+	'ELVUI_FORCE_UPDATE',
+	'EQUIPMENT_SETS_CHANGED',
+	'PLAYER_EQUIPMENT_CHANGED',
+	'EQUIPMENT_SWAP_FINISHED'
 }
 
 
