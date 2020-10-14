@@ -149,5 +149,5 @@ end
 ]]
 
 
-DT:RegisterDatatext('Volume', {'PLAYER_ENTERING_WORLD', "CVAR_UPDATE"}, OnEvent, nil, OnClick, nil, nil)
+DT:RegisterDatatext('Volume', 'ExtraDataTexts', {'PLAYER_ENTERING_WORLD', "CVAR_UPDATE"}, OnEvent, nil, OnClick, nil, nil)
 
