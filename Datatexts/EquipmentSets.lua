@@ -99,15 +99,11 @@ function OnClick(self, button)
 end
 
 local function OnEvent(self, event, ...)
-    if event == 'ELVUI_FORCE_UPDATE' or event == 'PLAYER_ENTERING_WORLD' then
-        if event == 'PLAYER_ENTERING_WORLD' then
-            self:UnregisterEvent(event)
-        end
-        
-        RefreshCache()
-    else
-        RefreshCache()
+    if event == 'PLAYER_ENTERING_WORLD' then
+        self:UnregisterEvent(event)
     end
+    
+    RefreshCache()
     
     if activeSetIndex == -1 then
         self.text:SetText('No Set Equipped')
