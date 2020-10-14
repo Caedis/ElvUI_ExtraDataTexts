@@ -80,10 +80,7 @@ local OnUpdate = function(self, elapsed)
 			self.text:SetFormattedText('%d seconds', Second)			
 		end
 	else
-		if ElapsedTimer > 1 and not self.Requested then
-			self.Requested = true
-			RequestTimePlayed()
-		end
+		self.text:SetText('Waiting')
 	end
 end
 
@@ -116,7 +113,7 @@ local OnEvent = function(self, event, ...)
 	if event == 'PLAYER_ENTERING_WORLD' then
 		self:UnregisterEvent(event)
 		if not IsAddOnLoaded('DataStore_Characters') then
-			RequestTimePlayed()
+			E:Delay(5, RequestTimePlayed)
 		end
 	end
 	if event == 'PLAYER_LOGOUT' then
