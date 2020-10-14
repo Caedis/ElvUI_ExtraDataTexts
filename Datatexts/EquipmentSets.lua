@@ -36,7 +36,7 @@ local function OnEnter(self)
 
 	DT.tooltip:AddLine(' ')
 
-	DT.tooltip:AddLine('|cffFFFFFFLeft Click:|r Equipment Set Dropdown')
+	DT.tooltip:AddLine('|cffFFFFFFLeft Click:|r Change Equipment Set')
 	DT.tooltip:AddLine('|cffFFFFFFShift + Left Click:|r Open Equipment Manager')
 
 	DT.tooltip:Show()
