@@ -17,7 +17,7 @@ local IsShiftKeyDown = IsShiftKeyDown
 
 local volumeCVars = {
 	{
-		Name = "Master",
+		Name = MASTER,
 		Volume = {
 			CVar = "Sound_MasterVolume",
 			Value = 0
@@ -28,7 +28,7 @@ local volumeCVars = {
 		}
 	},
 	{
-		Name = "SFX",
+		Name = SOUND_VOLUME,
 		Volume = {
 			CVar = "Sound_SFXVolume",
 			Value = 0
@@ -39,7 +39,7 @@ local volumeCVars = {
 		}
 	},
 	{
-		Name = "Ambience",
+		Name = AMBIENCE_VOLUME,
 		Volume = {
 			CVar = "Sound_AmbienceVolume",
 			Value = 0
@@ -50,7 +50,7 @@ local volumeCVars = {
 		}
 	},
 	{
-		Name = "Dialog",
+		Name = DIALOG_VOLUME,
 		Volume = {
 			CVar = "Sound_DialogVolume",
 			Value = 0
@@ -61,7 +61,7 @@ local volumeCVars = {
 		}
 	},
 	{
-		Name = "Music",
+		Name = MUSIC_VOLUME,
 		Volume = {
 			CVar = "Sound_MusicVolume",
 			Value = 0
@@ -89,7 +89,7 @@ local function OnEvent(self, event, ...)
 		value.Enable.Value = getCV(value.Enable.CVar)
 	end
 
-	if (event == "PLAYER_ENTERING_WORLD" ) then
+	if (event == "ELVUI_FORCE_UPDATE" ) then -- I hate you Azil <3
 
 		self:EnableMouseWheel(true)
 
