@@ -12,4 +12,4 @@ local function OnEvent(self, event, unit)
 	end
 end
 
-DT:RegisterDatatext('Raid Group', {"GROUP_ROSTER_UPDATE", "PLAYER_ENTERING_WORLD"}, OnEvent)
+DT:RegisterDatatext('Raid Group', 'ExtraDataTexts', {"GROUP_ROSTER_UPDATE", "PLAYER_ENTERING_WORLD"}, OnEvent)

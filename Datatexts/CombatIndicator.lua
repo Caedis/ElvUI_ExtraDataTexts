@@ -29,5 +29,5 @@ end
 ]]
 
 
-DT:RegisterDatatext('Combat Indicator', {'PLAYER_ENTERING_WORLD', 'PLAYER_REGEN_ENABLED', 'PLAYER_REGEN_DISABLED'}, OnEvent)
+DT:RegisterDatatext('Combat Indicator', 'ExtraDataTexts', {'PLAYER_ENTERING_WORLD', 'PLAYER_REGEN_ENABLED', 'PLAYER_REGEN_DISABLED'}, OnEvent)
 
