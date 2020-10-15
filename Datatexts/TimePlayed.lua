@@ -23,7 +23,7 @@ local OnEnter = function(self)
 		DT.tooltip:ClearLines()
 		DT.tooltip:AddLine('Time Played', 1, 1, 1)
 		DT.tooltip:AddLine(' ')
-		DT.tooltip:AddDoubleLine("Session:", SessionDay > 0 and format(PlayedTimeFormatFull, SessionDay, SessionHour, SessionMinute, SessionSecond) or format(PlayedTimeFormatNoDay, SessionHour, SessionMinute, SessionSecond), 1, 1, 1, 1, 1, 1)
+		DT.tooltip:AddDoubleLine('Session:', SessionDay > 0 and format(PlayedTimeFormatFull, SessionDay, SessionHour, SessionMinute, SessionSecond) or format(PlayedTimeFormatNoDay, SessionHour, SessionMinute, SessionSecond), 1, 1, 1, 1, 1, 1)
 		if LastLevelSecond > 0 then
 			DT.tooltip:AddDoubleLine(format('%s %s:', PREVIOUS, LEVEL), LastLevelDay > 0 and format(PlayedTimeFormatFull, LastLevelDay. LastLevelHour, LastLevelMinute, LastLevelSecond) or format(PlayedTimeFormatNoDay, LastLevelHour, LastLevelMinute, LastLevelSecond), 1, 1, 1, 1, 1, 1)
 		end
@@ -141,5 +141,12 @@ local OnMouseDown = function(self, button)
 	end
 end
 
+local events = {
+	'TIME_PLAYED_MSG',
+	'PLAYER_LEVEL_UP',
+	'PLAYER_ENTERING_WORLD',
+	'ELVUI_FORCE_UPDATE',
+	'PLAYER_LOGOUT',
+}
 
-DT:RegisterDatatext('Time Played', 'ExtraDataTexts', {'TIME_PLAYED_MSG', 'PLAYER_LEVEL_UP', 'PLAYER_ENTERING_WORLD' , 'PLAYER_LOGOUT'}, OnEvent, OnUpdate, OnMouseDown, OnEnter, OnLeave)
+DT:RegisterDatatext('Time Played', 'ExtraDataTexts', events, OnEvent, OnUpdate, OnMouseDown, OnEnter, OnLeave)

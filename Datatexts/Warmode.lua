@@ -1,5 +1,5 @@
 local E, L, V, P, G, _ = unpack(ElvUI)
-local DT = E:GetModule("DataTexts")
+local DT = E:GetModule('DataTexts')
 
 --Cache global variables
 --Lua functions
@@ -40,11 +40,11 @@ local function OnEnter(self)
         if(not C_PvP_CanToggleWarModeInArea()) then
             if(C_PvP_IsWarModeDesired()) then
                 if(not canToggleWarmodeOFF and not IsResting()) then
-                    warmodeErrorText = UnitFactionGroup("player") == PLAYER_FACTION_GROUP[0] and PVP_WAR_MODE_NOT_NOW_HORDE_RESTAREA or PVP_WAR_MODE_NOT_NOW_ALLIANCE_RESTAREA;
+                    warmodeErrorText = UnitFactionGroup('player') == PLAYER_FACTION_GROUP[0] and PVP_WAR_MODE_NOT_NOW_HORDE_RESTAREA or PVP_WAR_MODE_NOT_NOW_ALLIANCE_RESTAREA;
                 end
             else
                 if(not canToggleWarmode) then
-                    warmodeErrorText = UnitFactionGroup("player") == PLAYER_FACTION_GROUP[0] and PVP_WAR_MODE_NOT_NOW_HORDE or PVP_WAR_MODE_NOT_NOW_ALLIANCE;
+                    warmodeErrorText = UnitFactionGroup('player') == PLAYER_FACTION_GROUP[0] and PVP_WAR_MODE_NOT_NOW_HORDE or PVP_WAR_MODE_NOT_NOW_ALLIANCE;
                 end
             end
         end
@@ -56,9 +56,8 @@ local function OnEnter(self)
     DT.tooltip:Show()
 end
 
---azeriteItemsList
 function OnClick(self, button)
-    if button == "LeftButton" then
+    if button == 'LeftButton' then
         DT.tooltip:Hide()
 
         if C_PvP_CanToggleWarMode(not C_PvP_IsWarModeActive()) then
@@ -71,20 +70,21 @@ local function OnEvent(self, event, unit)
     local color
     local icon
     if C_PvP_IsWarModeDesired() then
-        color = "ff0000"
-        icon = " |TInterface\\Icons\\ui_warmode:16|t "
+        color = 'ff0000'
+        icon = ' |TInterface\\Icons\\ui_warmode:16|t '
     else
-        color = "00ff00"
-        icon = ""
+        color = '00ff00'
+        icon = ''
     end
 
-    self.text:SetText(format("%s|cff%sWar Mode%s", icon, color, icon))
+    self.text:SetText(format('%s|cff%sWar Mode%s', icon, color, icon))
 end
 
 local events = {
-    "PLAYER_ENTERING_WORLD",
-    "WAR_MODE_STATUS_UPDATE",
-    "PLAYER_FLAGS_CHANGED"
+    'PLAYER_ENTERING_WORLD',
+    'ELVUI_FORCE_UPDATE',
+    'WAR_MODE_STATUS_UPDATE',
+    'PLAYER_FLAGS_CHANGED'
 }
 --[[
 	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc)
@@ -96,4 +96,4 @@ local events = {
 	click - function to fire when clicking the datatext
 	onEnterFunc - function to fire OnEnter
 ]]
-DT:RegisterDatatext("War Mode", 'ExtraDataTexts', events, OnEvent, nil, OnClick, OnEnter)
+DT:RegisterDatatext('War Mode', 'ExtraDataTexts', events, OnEvent, nil, OnClick, OnEnter)
