@@ -43,7 +43,7 @@ local function OnEnter(self)
 end
 
 function OnClick(self, button)
-	if button == "LeftButton" then
+	if button == 'LeftButton' then
 		if IsShiftKeyDown() then
 			ToggleCharacter('PaperDollFrame')
 
@@ -109,6 +109,7 @@ local function OnEvent(self, event, ...)
 end
 
 
+local displayString = ''
 local function ValueColorUpdate()
 	displayString = strjoin('', '|cffFFFFFF%s:|r ')
 

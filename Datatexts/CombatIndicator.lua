@@ -5,15 +5,15 @@ local format = format
 local function OnEvent(self, event, ...)
 
 	
-	if event == "PLAYER_REGEN_ENABLED" then
-		self.text:SetText("Out of Combat")
+	if event == 'PLAYER_REGEN_ENABLED' then
+		self.text:SetText('Out of Combat')
 		return;
-	elseif event == "PLAYER_REGEN_DISABLED" then
-		self.text:SetText(format("|cffff0000In Combat|r"))
+	elseif event == 'PLAYER_REGEN_DISABLED' then
+		self.text:SetText(format('|cffff0000In Combat|r'))
 		return;
 	end
 	
-	self.text:SetText("Out of Combat")
+	self.text:SetText('Out of Combat')
 end
 	
 --[[
@@ -28,6 +28,12 @@ end
 	onLeaveFunc - function to fire OnLeave, if not provided one will be set for you that hides the tooltip.
 ]]
 
+local events = {
+	'PLAYER_ENTERING_WORLD',
+	'ELVUI_FORCE_UPDATE',
+	'PLAYER_REGEN_ENABLED',
+	'PLAYER_REGEN_DISABLED'
+}
 
-DT:RegisterDatatext('Combat Indicator', 'ExtraDataTexts', {'PLAYER_ENTERING_WORLD', 'PLAYER_REGEN_ENABLED', 'PLAYER_REGEN_DISABLED'}, OnEvent)
+DT:RegisterDatatext('Combat Indicator', 'ExtraDataTexts', events, OnEvent)
 

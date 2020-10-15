@@ -10,10 +10,12 @@ local TotalPlayTime, LevelPlayTime, SessionPlayTime, LevelPlayedOffset, LastLeve
 local MyRealm = GetRealmName();
 local MyName = UnitName('player')
 local MyClass = select(2, UnitClass('player'))
+local RequestTimePlayed = RequestTimePlayed
 
 local OnEnter = function(self)
 	if not InCombatLockdown() and SessionPlayTime then
-	DT:SetupTooltip(self)
+		E:UIFrameFadeIn(self, 0.4, self:GetAlpha(), 1)
+		DT:SetupTooltip(self)
 		local SessionDay, SessionHour, SessionMinute, SessionSecond = ChatFrame_TimeBreakDown(GetTime() - SessionPlayTime)
 		local TotalDay, TotalHour, TotalMinute, TotalSecond = ChatFrame_TimeBreakDown(TotalPlayTime + (GetTime() - SessionPlayTime))
 		local LevelDay, LevelHour, LevelMinute, LevelSecond = ChatFrame_TimeBreakDown(LevelPlayTime + (GetTime() - LevelPlayTimeOffset))
@@ -22,7 +24,7 @@ local OnEnter = function(self)
 		DT.tooltip:ClearLines()
 		DT.tooltip:AddLine('Time Played', 1, 1, 1)
 		DT.tooltip:AddLine(' ')
-		DT.tooltip:AddDoubleLine("Session:", SessionDay > 0 and format(PlayedTimeFormatFull, SessionDay, SessionHour, SessionMinute, SessionSecond) or format(PlayedTimeFormatNoDay, SessionHour, SessionMinute, SessionSecond), 1, 1, 1, 1, 1, 1)
+		DT.tooltip:AddDoubleLine('Session:', SessionDay > 0 and format(PlayedTimeFormatFull, SessionDay, SessionHour, SessionMinute, SessionSecond) or format(PlayedTimeFormatNoDay, SessionHour, SessionMinute, SessionSecond), 1, 1, 1, 1, 1, 1)
 		if LastLevelSecond > 0 then
 			DT.tooltip:AddDoubleLine(format('%s %s:', PREVIOUS, LEVEL), LastLevelDay > 0 and format(PlayedTimeFormatFull, LastLevelDay. LastLevelHour, LastLevelMinute, LastLevelSecond) or format(PlayedTimeFormatNoDay, LastLevelHour, LastLevelMinute, LastLevelSecond), 1, 1, 1, 1, 1, 1)
 		end
@@ -53,39 +55,71 @@ local OnEnter = function(self)
 	end
 end
 
-local ElapsedTimer = 0
+local ONUPDATE_INTERVAL = 1
+local TimeSinceLastUpdate = 0
 local OnUpdate = function(self, elapsed)
-	ElapsedTimer = ElapsedTimer + elapsed
-	if (not self.text) then
-		local text = self:CreateFontString(nil, 'OVERLAY')
-		text:SetFont(DataText.Font, DataText.Size, DataText.Flags)
-		text:SetText('Time Played')
-		self.text = text
-	end
-	
-	if TotalPlayTime and LevelPlayTime and SessionPlayTime then
-		local Day, Hour, Minute, Second
-		if UnitLevel('player') ~= MAX_PLAYER_LEVEL then
-			Day, Hour, Minute, Second = ChatFrame_TimeBreakDown(LevelPlayTime + (GetTime() - LevelPlayTimeOffset))
-		else
-			Day, Hour, Minute, Second = ChatFrame_TimeBreakDown(TotalPlayTime + (GetTime() - SessionPlayTime))
+	TimeSinceLastUpdate = TimeSinceLastUpdate + elapsed
+
+	if TimeSinceLastUpdate >= ONUPDATE_INTERVAL then
+		TimeSinceLastUpdate = 0
+		
+		if (not self.text) then
+			local text = self:CreateFontString(nil, 'OVERLAY')
+			text:SetFont(DataText.Font, DataText.Size, DataText.Flags)
+			text:SetText('Time Played')
+			self.text = text
 		end
-		if Day > 0 then
-			self.text:SetFormattedText('%d days %d hours %d minutes', Day, Hour, Minute)
-		elseif Hour > 0 then
-			self.text:SetFormattedText('%d hours %d minutes', Hour, Minute)
-		elseif Minute > 0 then
-			self.text:SetFormattedText('%d minutes', Minute)
+
+		if TotalPlayTime and LevelPlayTime and SessionPlayTime then
+			local Day, Hour, Minute, Second
+			if UnitLevel('player') ~= MAX_PLAYER_LEVEL then
+				Day, Hour, Minute, Second = ChatFrame_TimeBreakDown(LevelPlayTime + (GetTime() - LevelPlayTimeOffset))
+			else
+				Day, Hour, Minute, Second = ChatFrame_TimeBreakDown(TotalPlayTime + (GetTime() - SessionPlayTime))
+			end
+
+			local text = ''
+
+			if Day > 0 then
+				if Day == 1 then
+					text = text..format('%d day ', Day)
+				else
+					text = text..format('%d days ', Day)
+				end
+
+			if Hour > 0 then
+				if Hour == 1 then
+					text = text..format('%d hour ', Hour)
+				else
+					text = text..format('%d hours ', Hour)
+				end
+			end
+
+			if Minute > 0 then
+				if Minute == 1 then
+					text = text..format('%d minute ', Minute)
+				else
+					text = text..format('%d minutes ', Minute)
+				end
+			end
+
+			if Day == 0 then
+				if Second == 1 then
+					text = text..format('%d second ', Second)
+				else
+					text = text..format('%d seconds ', Second)
+				end
+			end
+
+			self.text:SetText(text)
+			end
 		else
-			self.text:SetFormattedText('%d seconds', Second)			
+			self.text:SetText('Waiting')
 		end
-	else
-		self.text:SetText('Waiting')
 	end
 end
 
 local OnEvent = function(self, event, ...)
-		
 		
 	if not ElvDB['ExtraDataTexts'] then ElvDB['ExtraDataTexts'] = {} end
 	if not ElvDB['ExtraDataTexts']['TimePlayed'] then ElvDB['ExtraDataTexts']['TimePlayed'] = {} end
@@ -110,14 +144,17 @@ local OnEvent = function(self, event, ...)
 		LevelPlayTimeOffset = GetTime()
 		ElvDB['ExtraDataTexts']['TimePlayed'][MyRealm][MyName]['Level'] = UnitLevel('player')
 	end
-	if event == 'PLAYER_ENTERING_WORLD' then
-		self:UnregisterEvent(event)
+	if event == 'PLAYER_ENTERING_WORLD' or event == 'ELVUI_FORCE_UPDATE' then
+		
+		if event == 'PLAYER_ENTERING_WORLD' then
+			self:UnregisterEvent(event)
+		end
 		if not IsAddOnLoaded('DataStore_Characters') then
-			E:Delay(5, RequestTimePlayed)
+			C_Timer.After(8, RequestTimePlayed) 
 		end
 	end
 	if event == 'PLAYER_LOGOUT' then
-		RequestTimePlayed()
+		--RequestTimePlayed()
 	end
 	
 end
@@ -129,7 +166,7 @@ local function Reset()
 	ElvDB['ExtraDataTexts']['TimePlayed'][MyRealm][MyName]['LastLevelTime'] = LastLevelTime
 	ElvDB['ExtraDataTexts']['TimePlayed'][MyRealm][MyName]['Class'] = MyClass
 	RequestTimePlayed()
-	print(': Time Played has been reset!')
+	print('Time Played has been reset!')
 end
 
 local OnMouseDown = function(self, button)
@@ -140,5 +177,12 @@ local OnMouseDown = function(self, button)
 	end
 end
 
+local events = {
+	'ELVUI_FORCE_UPDATE',
+	'PLAYER_ENTERING_WORLD',
+	'TIME_PLAYED_MSG',
+	'PLAYER_LEVEL_UP',
+	'PLAYER_LOGOUT',
+}
 
-DT:RegisterDatatext('Time Played', 'ExtraDataTexts', {'TIME_PLAYED_MSG', 'PLAYER_LEVEL_UP', 'PLAYER_ENTERING_WORLD' , 'PLAYER_LOGOUT'}, OnEvent, OnUpdate, OnMouseDown, OnEnter, OnLeave)
+DT:RegisterDatatext('Time Played', 'ExtraDataTexts', events, OnEvent, OnUpdate, OnMouseDown, OnEnter, OnLeave)

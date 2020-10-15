@@ -10,91 +10,71 @@ local tonumber = tonumber
 local tostring = tostring
 
 --WoW API / Variables
-local L_EasyMenu = L_EasyMenu
 local setCV = SetCVar
 local getCV = GetCVar
 local IsShiftKeyDown = IsShiftKeyDown
+local SOUND = SOUND
+local ShowOptionsPanel = ShowOptionsPanel
 
-local volumeCVars = {
+local displayString = ''
+
+local volumeCVars =
 	{
-		Name = MASTER,
-		Volume = {
-			CVar = "Sound_MasterVolume",
-			Value = 0
-		},
-		Enable = {
-			CVar = "Sound_EnableMaster",
-			Value = 0
-		}
-	},
-	{
-		Name = SOUND_VOLUME,
-		Volume = {
-			CVar = "Sound_SFXVolume",
-			Value = 0
-		},
-		Enable = {
-			CVar = "Sound_EnableSXF",
-			Value = 0
-		}
-	},
-	{
-		Name = AMBIENCE_VOLUME,
-		Volume = {
-			CVar = "Sound_AmbienceVolume",
-			Value = 0
-		},
-		Enable = {
-			CVar = "Sound_EnableAmbience",
-			Value = 0
-		}
-	},
-	{
-		Name = DIALOG_VOLUME,
-		Volume = {
-			CVar = "Sound_DialogVolume",
-			Value = 0
-		},
-		Enable = {
-			CVar = "Sound_EnableDialog",
-			Value = 0
-		}
-	},
-	{
-		Name = MUSIC_VOLUME,
-		Volume = {
-			CVar = "Sound_MusicVolume",
-			Value = 0
-		},
-		Enable = {
-			CVar = "Sound_EnableMusic",
-			Value = 0
-		}
+		[1] = {Name = MASTER, CVs = { Volume = 'Sound_MasterVolume', Enabled = 'Sound_EnableAllSound' }, Enabled = nil},
+		[2] = {Name = SOUND_VOLUME, CVs = { Volume = 'Sound_SFXVolume', Enabled = 'Sound_EnableSFX' }, Enabled = nil},
+		[3] = {Name = AMBIENCE_VOLUME, CVs = { Volume = 'Sound_AmbienceVolume', Enabled = 'Sound_EnableAmbience' }, Enabled = nil},
+		[4] = {Name = DIALOG_VOLUME, CVs = { Volume = 'Sound_DialogVolume', Enabled = 'Sound_EnableDialog' }, Enabled = nil},
+		[5] = {Name = MUSIC_VOLUME, CVs = { Volume = 'Sound_MusicVolume', Enabled = 'Sound_EnableMusic' }, Enabled = nil}
 	}
-}
+
 
 local activeVolumeIndex = 1
 local activeVolume = volumeCVars[activeVolumeIndex]
+local menu = {
+	[1] = {text = 'Volume Stream', isTitle = true, notCheckable = true}
+}
 
-
-local function roundVal(num, numDecimalPlaces)
-  local mult = 10^(numDecimalPlaces or 0)
-  return ceil(num * mult + 0.5) / mult
-end
-
-local function OnEvent(self, event, ...)
-	for key,value in pairs(volumeCVars) do
-		value.Volume.Value = roundVal(getCV(value.Volume.CVar), 3)
-		setCV(value.Volume.CVar, value.Volume.Value)
-		value.Enable.Value = getCV(value.Enable.CVar)
+local function GetStatusColor(vol, text)
+	if not text then
+		text = vol.Name
 	end
 
-	if (event == "ELVUI_FORCE_UPDATE" ) then -- I hate you Azil <3
+	return strform('|cFF%s%s|r',(getCV(vol.CVs.Volume) == '0' or not vol.Enabled) and 'FF0000' or '00FF00', text)
+end
+
+local function OnEnter(self)
+	E:UIFrameFadeIn(self, 0.4, self:GetAlpha(), 1)
+
+	DT:SetupTooltip(self)
+	DT.tooltip:ClearLines()
+
+	DT.tooltip:AddLine('Volume Streams')
+	DT.tooltip:AddLine(' ')
+	
+	for _,vol in ipairs(volumeCVars) do
+		DT.tooltip:AddDoubleLine(vol.Name, GetStatusColor(vol, strform('%.f', getCV(vol.CVs.Volume) * 100) .. '%'))
+	end
+
+	DT.tooltip:AddLine(' ')
+
+	DT.tooltip:AddLine('|cffFFFFFFLeft Click:|r Select Volume Stream')
+	DT.tooltip:AddLine('|cffFFFFFFRight Click:|r Toggle Volume Stream')
+	DT.tooltip:AddLine('|cffFFFFFFShift + Left Click:|r Open System Audio Panel')
+
+	DT.tooltip:Show()
+end
+
+
+
+local function OnEvent(self, event, ...)
+	activeVolume = volumeCVars[activeVolumeIndex]
+
+	if (event == 'ELVUI_FORCE_UPDATE' ) then -- I hate you Azil <3
 
 		self:EnableMouseWheel(true)
 
-		self:SetScript("OnMouseWheel", function(tself, delta)
-			local vol = activeVolume.Volume.Value;
+		self:SetScript('OnMouseWheel', function(tself, delta)
+			local vol = getCV(activeVolume.CVs.Volume);
 			local volScale = 100;
 			
 			if (IsShiftKeyDown()) then
@@ -108,46 +88,81 @@ local function OnEvent(self, event, ...)
 			elseif (vol <= 0) then
 				vol = 0
 			end
-			
-			
-			activeVolume.Volume.Value = vol
-			setCV(activeVolume.Volume.CVar, vol)
-			self.text:SetText(activeVolume.Name..": "..strform("%.f", vol * 100) .. "%")
+		
+			setCV(activeVolume.CVs.Volume, vol)
+			OnEvent(self, nil)
 		end)
 		
 	end
+
 	
-	self.text:SetText(activeVolume.Name..": "..strform("%.f", activeVolume.Volume.Value * 100) .. "%")
-	
-end
 
+	for i = 1, #volumeCVars do
+		volumeCVars[i].Enabled = getCV(volumeCVars[i].CVs.Enabled) == '1'
 
-
-local function OnClick(self)
-	activeVolumeIndex = activeVolumeIndex + 1
-	if (activeVolumeIndex == 6) then
-		activeVolumeIndex = 1
+		menu[i+1]={
+			text = volumeCVars[i].Name,
+			checked = i == activeVolumeIndex,
+			func = function(slf)
+				activeVolumeIndex = i; 
+				OnEvent(self, nil);
+			 end
+		}
 	end
-
-	activeVolume = volumeCVars[activeVolumeIndex]
 	
 
-	OnEvent(self, nil, nil)
+	
+	self.text:SetText(activeVolume.Name..': '..GetStatusColor(activeVolume, strform('%.f', getCV(activeVolume.CVs.Volume) * 100) .. '%'))
 end
 
-	
---[[
-	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc)
-	
-	name - name of the datatext (required)
-	events - must be a table with string values of event names to register 
-	eventFunc - function that gets fired when an event gets triggered
-	updateFunc - onUpdate script target function
-	click - function to fire when clicking the datatext
-	onEnterFunc - function to fire OnEnter
-	onLeaveFunc - function to fire OnLeave, if not provided one will be set for you that hides the tooltip.
-]]
 
 
-DT:RegisterDatatext('Volume', 'ExtraDataTexts', {'PLAYER_ENTERING_WORLD', "CVAR_UPDATE"}, OnEvent, nil, OnClick, nil, nil)
+local function OnClick(self, button)
 
+	if button == 'LeftButton' then
+		if IsShiftKeyDown() then
+			ShowOptionsPanel(_G.VideoOptionsFrame, _G.GameMenuFrame, SOUND)
+			return
+		end
+
+		menu[1].text = 'Select Volume Stream'
+		for i = 2, #menu do
+			menu[i].checked = i - 1 == activeVolumeIndex
+			menu[i].func = function(slf)
+				activeVolumeIndex = i - 1; 
+				OnEvent(self, nil);
+			end
+		end
+
+		DT:SetEasyMenuAnchor(DT.EasyMenu, self)
+		_G.EasyMenu(menu, DT.EasyMenu, nil, nil, nil, 'MENU')
+	elseif button == 'RightButton' then
+		menu[1].text = 'Toggle Volume Stream'
+		for i = 2, #menu do
+			menu[i].checked = volumeCVars[i - 1].Enabled
+			menu[i].func = function(slf)
+					setCV(volumeCVars[i - 1].CVs.Enabled, (not volumeCVars[i - 1].Enabled) and '1' or '0');
+					OnEvent(self, nil);
+			end
+		end
+
+		DT:SetEasyMenuAnchor(DT.EasyMenu, self)
+		_G.EasyMenu(menu, DT.EasyMenu, nil, nil, nil, 'MENU')
+	end
+end
+
+
+local function ValueColorUpdate()
+	displayString = strjoin('', '|cffFFFFFF%s:|r ')
+
+	if lastPanel then OnEvent(lastPanel) end
+end
+E.valueColorUpdateFuncs[ValueColorUpdate] = true
+
+local events = {
+	'PLAYER_ENTERING_WORLD',
+	'ELVUI_FORCE_UPDATE',
+	'CVAR_UPDATE'
+}
+
+DT:RegisterDatatext('Volume', 'ExtraDataTexts', events, OnEvent, nil, OnClick, OnEnter)
