@@ -109,6 +109,7 @@ local function OnEvent(self, event, ...)
 end
 
 
+local displayString = ''
 local function ValueColorUpdate()
 	displayString = strjoin('', '|cffFFFFFF%s:|r ')
 

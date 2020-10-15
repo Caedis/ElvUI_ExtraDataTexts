@@ -13,7 +13,8 @@ local MyClass = select(2, UnitClass('player'))
 
 local OnEnter = function(self)
 	if not InCombatLockdown() and SessionPlayTime then
-	DT:SetupTooltip(self)
+		E:UIFrameFadeIn(self, 0.4, self:GetAlpha(), 1)
+		DT:SetupTooltip(self)
 		local SessionDay, SessionHour, SessionMinute, SessionSecond = ChatFrame_TimeBreakDown(GetTime() - SessionPlayTime)
 		local TotalDay, TotalHour, TotalMinute, TotalSecond = ChatFrame_TimeBreakDown(TotalPlayTime + (GetTime() - SessionPlayTime))
 		local LevelDay, LevelHour, LevelMinute, LevelSecond = ChatFrame_TimeBreakDown(LevelPlayTime + (GetTime() - LevelPlayTimeOffset))
