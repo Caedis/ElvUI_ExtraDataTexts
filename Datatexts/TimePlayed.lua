@@ -103,13 +103,13 @@ local OnUpdate = function(self, elapsed)
 				end
 			end
 
-			--if Day == 0 then
+			if Day == 0 then
 				if Second == 1 then
 					text = text..format('%d second ', Second)
 				else
 					text = text..format('%d seconds ', Second)
 				end
-			--end
+			end
 
 			self.text:SetText(text)
 			end
