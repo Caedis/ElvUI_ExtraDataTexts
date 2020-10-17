@@ -8,5 +8,4 @@
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 
-oUFTags\load_ouftags.xml
 Datatexts\load_datatexts.xml
