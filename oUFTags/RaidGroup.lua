@@ -4,7 +4,7 @@ ElvUF.Tags.Methods['raidgroup'] = function(unit)
 		for i = 1, GetNumGroupMembers() do
 			local name, _, subgroup = GetRaidRosterInfo(i)
 			if name == UnitName('player') then
-				return format('Group: %d', subgroup)
+				return subgroup
 			end
 		end
 	end
