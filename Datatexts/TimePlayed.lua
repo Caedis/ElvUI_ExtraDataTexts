@@ -6,7 +6,7 @@ local DT = E:GetModule('DataTexts')
 local format, GetTime, ChatFrame_TimeBreakDown, InCombatLockdown = format, GetTime, ChatFrame_TimeBreakDown, InCombatLockdown
 local PlayedTimeFormatFull = '%dd %dh %dm %ds'
 local PlayedTimeFormatNoDay = '%dh %dm %ds'
-local TotalPlayTime, LevelPlayTime, SessionPlayTime, LevelPlayedOffset, LastLevelTime
+local TotalPlayTime, LevelPlayTime, SessionPlayTime, LevelPlayedOffset, LastLevelTime, LevelPlayTimeOffset
 local MyRealm = GetRealmName();
 local MyName = UnitName('player')
 local MyClass = select(2, UnitClass('player'))

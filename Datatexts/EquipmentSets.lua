@@ -42,7 +42,7 @@ local function OnEnter(self)
 	DT.tooltip:Show()
 end
 
-function OnClick(self, button)
+local function OnClick(self, button)
 	if button == 'LeftButton' then
 		if IsShiftKeyDown() then
 			ToggleCharacter('PaperDollFrame')
