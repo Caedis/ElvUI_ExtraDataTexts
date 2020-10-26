@@ -86,14 +86,5 @@ local events = {
     'WAR_MODE_STATUS_UPDATE',
     'PLAYER_FLAGS_CHANGED'
 }
---[[
-	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc)
-	
-	name - name of the datatext (required)
-	events - must be a table with string values of event names to register 
-	eventFunc - function that gets fired when an event gets triggered
-	updateFunc - onUpdate script target function
-	click - function to fire when clicking the datatext
-	onEnterFunc - function to fire OnEnter
-]]
+
 DT:RegisterDatatext('War Mode', 'ExtraDataTexts', events, OnEvent, nil, OnClick, OnEnter)
