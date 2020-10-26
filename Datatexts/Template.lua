@@ -1,8 +1,15 @@
 ----------------------------------------------------------------------------------
 -- This file is a blank datatext example template, this file will not be loaded.
 ----------------------------------------------------------------------------------
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
+
+--Lua caching
+local format, strjoin = string.format, string.join
+
+--WoW API caching
+
+
 
 local function Update(self, t)
 
@@ -22,10 +29,8 @@ local function OnEnter(self)
 	DT.tooltip:Show()
 end
 
-local function ValueColorUpdate()
-	displayString = strjoin('', '|cffFFFFFF%s:|r ')
-
-	if lastPanel then OnEvent(lastPanel) end
+local function ValueColorUpdate(hex)
+	displayString = strjoin('', hex, '%.2f|r', ' | ', hex, '%.2f|r')
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
