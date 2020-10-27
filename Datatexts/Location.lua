@@ -1,8 +1,5 @@
-local E, L, V, P, G = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, _, P = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
-
---Lua caching
-local format,strjoin = string.format, string.join
 
 --WoW API caching
 local WrapTextInColorCode = WrapTextInColorCode
@@ -18,7 +15,7 @@ local mapInfo = E.MapInfo
 local function GetStatus()
 	local pvpType = GetZonePVPInfo()
 	local inInstance = IsInInstance()
-	local r, g, b = 1, 1, 0
+	local r, g, b
 
 	if (pvpType == "sanctuary") then
 		r, g, b = 0.41, 0.8, 0.94
@@ -34,7 +31,7 @@ local function GetStatus()
 		r, g, b = 1, 0.1, 0.1
 	elseif inInstance then
 		r, g, b = 1, 0.1, 0.1
-	else 
+	else
 		r, g, b = 1.0, 0.93, 0.76
 	end
 
@@ -44,7 +41,7 @@ end
 
 
 
-local function OnEvent(self, event, ...)
+local function OnEvent(self)
 	if not mapInfo.mapID then
 		self.text:SetText('N/A')
 		return
@@ -59,7 +56,7 @@ local function OnEvent(self, event, ...)
 	end
 
 	if db.showZone then
-		text = text and (text .. ', ' .. mapInfo.zoneText) or mapInfo.zoneText 
+		text = text and (text .. ', ' .. mapInfo.zoneText) or mapInfo.zoneText
 	end
 
 	if db.showContinent then
@@ -87,7 +84,7 @@ local function OnClick()
 	_G.ToggleFrame(_G.WorldMapFrame)
 end
 
-local function OnEnter(self)
+local function OnEnter()
 	DT.tooltip:ClearLines()
 	-- code goes here
 	DT.tooltip:Show()

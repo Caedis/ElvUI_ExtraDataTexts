@@ -1,10 +1,9 @@
-local E, L, V, P, G, _ = unpack(ElvUI)
+local E = unpack(ElvUI)
 local DT = E:GetModule('DataTexts')
 
 --Cache global variables
 local _G = _G
 --Lua functions
-local floor = floor
 local format = string.format
 local pairs = pairs
 local IsShiftKeyDown = IsShiftKeyDown
@@ -19,6 +18,8 @@ local C_EquipmentSet_UseEquipmentSet = C_EquipmentSet.UseEquipmentSet
 local db = {}
 local activeSetIndex
 local setMenu = {}
+
+local hexColor = ''
 
 local function OnEnter(self)
 	E:UIFrameFadeIn(self, 0.4, self:GetAlpha(), 1)
@@ -58,25 +59,22 @@ local function OnClick(self, button)
 		_G.EasyMenu(setMenu, DT.EasyMenu, nil, nil, nil, 'MENU')
 
 	end
-	
+
 end
 
-local function OnEvent(self, event, ...)
-	if event == 'PLAYER_ENTERING_WORLD' then
-		self:UnregisterEvent(event)
-	end
-	
+
+local function OnEvent(self)
 	twipe(db)
 	twipe(setMenu)
 	tinsert(setMenu, { text = 'Equipment Sets', isTitle = true, notCheckable = true })
-	
+
 
 	local sets = C_EquipmentSet_GetEquipmentSetIDs()
 
 	activeSetIndex = -1
 	for i,setID in pairs(sets) do
 		local name, iconFileID, _, isEquipped = C_EquipmentSet_GetEquipmentSetInfo(setID)
-		
+
 		tinsert(setMenu,
 			{
 				text = format('|T%s:14:14:0:0:64:64:4:60:4:60|t  %s', iconFileID, name),
@@ -85,7 +83,7 @@ local function OnEvent(self, event, ...)
 			}
 		)
 
-		tinsert(db, 
+		tinsert(db,
 			{
 				SetID = setID,
 				Name = name,
@@ -98,32 +96,28 @@ local function OnEvent(self, event, ...)
 			activeSetIndex = i
 		end
 	end
-	
+
 	if activeSetIndex == -1 then
 		self.text:SetText('No Set Equipped')
 	else
 		local set = db[activeSetIndex]
-		self.text:SetText(format('Set: %s |T%s:16:16:0:0:64:64:4:60:4:60|t', set.Name, set.IconFileID))
+		self.text:SetText(format('Set: %s%s|r |T%s:16:16:0:0:64:64:4:60:4:60|t', hexColor, set.Name, set.IconFileID))
 	end
 
 end
 
 
-local displayString = ''
-local function ValueColorUpdate()
-	displayString = strjoin('', '|cffFFFFFF%s:|r ')
 
-	if lastPanel then OnEvent(lastPanel) end
+local function ValueColorUpdate(hex)
+	hexColor = hex
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
 local events = {
-	'PLAYER_ENTERING_WORLD',
-	'ELVUI_FORCE_UPDATE',
 	'EQUIPMENT_SETS_CHANGED',
 	'PLAYER_EQUIPMENT_CHANGED',
 	'EQUIPMENT_SWAP_FINISHED'
 }
 
 
-DT:RegisterDatatext('Equipment Sets', 'ExtraDataTexts', events, OnEvent, nil, OnClick, OnEnter)
+DT:RegisterDatatext('Equipment Sets', 'ExtraDataTexts', events, OnEvent, nil, OnClick, OnEnter, nil, nil, nil, ValueColorUpdate)

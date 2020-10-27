@@ -1,4 +1,4 @@
-local E, _, _, P = unpack(ElvUI);
+local P = select(4, unpack(ElvUI));
 
 P.extradatatexts = {
 	general = {

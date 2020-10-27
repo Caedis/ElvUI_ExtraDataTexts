@@ -1,10 +1,9 @@
 local addonName = ...
-local E, L, V, P, G = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, _, P = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local EDT = E:NewModule(addonName, 'AceEvent-3.0', 'AceConsole-3.0');
 local DT = E:GetModule('DataTexts')
 local EP = LibStub("LibElvUIPlugin-1.0");
-local format, strjoin, strlower = string.format, string.join, strlower
-local CreateFrame = CreateFrame
+local format, strjoin, strlower = string.format, strjoin, strlower
 local GetAddOnMetadata = GetAddOnMetadata
 local InCombatLockdown = InCombatLockdown
 
@@ -27,7 +26,6 @@ end
 local function InsertOptions()
 
 	local ACH = E.Libs.ACH
-	
 	local version = format('|cff1784d1v%s|r', GetAddOnMetadata(addonName, 'Version'))
 
 	E.Options.args.extraDT = {
@@ -61,7 +59,6 @@ local function InsertOptions()
 			order = 1,
 			type = 'group',
 			name = 'Text Options',
-			inline = true,
 			args = {
 				showContinent = {
 					order = 1,
@@ -89,7 +86,6 @@ local function InsertOptions()
 						['CLASS'] = 'Class',
 						['CUSTOM'] = 'Custom'
 					}
-		
 				},
 				customColor = {
 					order = 7,
@@ -111,13 +107,13 @@ local function InsertOptions()
 				},
 			}
 		},
-		
+
 		space1 = ACH:Spacer(10),
 		disableBlizzZoneText = {
 			order = 11,
 			name = 'Disable Blizzard Zone Text',
 			type = 'toggle',
-			set = function(info, value) E.db.extradatatexts.datatexts.location.disableBlizzZoneText = value E:StaticPopup_Show('CONFIG_RL') end
+			set = function(_, value) E.db.extradatatexts.datatexts.location.disableBlizzZoneText = value E:StaticPopup_Show('CONFIG_RL') end
 		}
 	}
 
@@ -130,7 +126,7 @@ function EDT:Print(...)
 end
 
 
-function EDT:Initialize(...)
+function EDT:Initialize()
 
 	if E.db.extradatatexts.datatexts.location.disableBlizzZoneText then
 		if not InCombatLockdown() then
@@ -141,9 +137,9 @@ function EDT:Initialize(...)
 		end
 	end
 
-	EDT:RegisterEvent('ADDON_LOADED', function(event, arg1)
-		if arg1 == "ElvUI_OptionsUI" then	
-			InsertOptions()	
+	EDT:RegisterEvent('ADDON_LOADED', function(_, arg1)
+		if arg1 == "ElvUI_OptionsUI" then
+			InsertOptions()
 			EDT:UnregisterEvent('ADDON_LOADED')
 		end
 	end)

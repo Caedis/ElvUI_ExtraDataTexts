@@ -3,12 +3,11 @@ local DT = E:GetModule('DataTexts')
 
 --Cache global variables
 --Lua functions
-local floor = floor
+
 local format = string.format
 --WoW API / Variables
 local C_PvP_IsWarModeActive = C_PvP.IsWarModeActive
 local C_PvP_IsWarModeDesired = C_PvP.IsWarModeDesired
-local C_PvP_IsWarModeFeatureEnabled = C_PvP.IsWarModeFeatureEnabled
 local C_PvP_ToggleWarMode = C_PvP.ToggleWarMode
 local C_PvP_CanToggleWarMode = C_PvP.CanToggleWarMode
 local C_PvP_CanToggleWarModeInArea = C_PvP.CanToggleWarModeInArea
@@ -19,7 +18,13 @@ local UnitFactionGroup = UnitFactionGroup
 local GameTooltip_AddColoredLine = GameTooltip_AddColoredLine
 local GameTooltip_AddNormalLine = GameTooltip_AddNormalLine
 
-local InCombatLockdown = InCombatLockdown
+local PVP_WAR_MODE_DESCRIPTION_FORMAT = PVP_WAR_MODE_DESCRIPTION_FORMAT
+local PLAYER_FACTION_GROUP = PLAYER_FACTION_GROUP
+local PVP_WAR_MODE_NOT_NOW_HORDE_RESTAREA = PVP_WAR_MODE_NOT_NOW_HORDE_RESTAREA
+local PVP_WAR_MODE_NOT_NOW_ALLIANCE_RESTAREA = PVP_WAR_MODE_NOT_NOW_ALLIANCE_RESTAREA
+local PVP_WAR_MODE_NOT_NOW_HORDE = PVP_WAR_MODE_NOT_NOW_HORDE
+local PVP_WAR_MODE_NOT_NOW_ALLIANCE = PVP_WAR_MODE_NOT_NOW_ALLIANCE
+local RED_FONT_COLOR = RED_FONT_COLOR
 
 local function OnEnter(self)
     E:UIFrameFadeIn(self, 0.4, self:GetAlpha(), 1)
@@ -32,9 +37,10 @@ local function OnEnter(self)
 
     GameTooltip_AddNormalLine(DT.tooltip, PVP_WAR_MODE_DESCRIPTION_FORMAT:format(warModeRewardBonus), true)
 
-    local canToggleWarmode = C_PvP_CanToggleWarMode(true);
-    local canToggleWarmodeOFF = C_PvP_CanToggleWarMode(false);
-    
+    local canToggleWarmode = C_PvP_CanToggleWarMode(true)
+    local canToggleWarmodeOFF = C_PvP_CanToggleWarMode(false)
+
+    local warmodeErrorText
     if (not canToggleWarmode or not canToggleWarmodeOFF) then
 
         if(not C_PvP_CanToggleWarModeInArea()) then
@@ -50,13 +56,12 @@ local function OnEnter(self)
         end
 
         GameTooltip_AddColoredLine(DT.tooltip, warmodeErrorText, RED_FONT_COLOR, true)
-    else
     end
 
     DT.tooltip:Show()
 end
 
-local function OnClick(self, button)
+local function OnClick(_, button)
     if button == 'LeftButton' then
         DT.tooltip:Hide()
 
@@ -66,7 +71,7 @@ local function OnClick(self, button)
     end
 end
 
-local function OnEvent(self, event, unit)
+local function OnEvent(self)
     local color
     local icon
     if C_PvP_IsWarModeDesired() then
@@ -81,8 +86,6 @@ local function OnEvent(self, event, unit)
 end
 
 local events = {
-    'PLAYER_ENTERING_WORLD',
-    'ELVUI_FORCE_UPDATE',
     'WAR_MODE_STATUS_UPDATE',
     'PLAYER_FLAGS_CHANGED'
 }
