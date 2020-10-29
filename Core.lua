@@ -29,7 +29,7 @@ local function InsertOptions()
 	local version = format('|cff1784d1v%s|r', GetAddOnMetadata(addonName, 'Version'))
 
 	E.Options.args.extraDT = {
-		name = '|cffffffffExtraDataTexts|r',
+		name = '|cff1784d1Extra|r|cffffffffDataTexts|r',
 		order = 6,
 		type = 'group',
 		childGroups = "tab",
