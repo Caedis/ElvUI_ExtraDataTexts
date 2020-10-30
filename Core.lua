@@ -55,12 +55,6 @@ local function InsertOptions()
 	opts.location = BuildBaseDTOption('Location')
 
 	opts.location.args = {
-
-		text = {
-			order = 1,
-			type = 'group',
-			name = 'Text Options',
-			args = {
 				showContinent = {
 					order = 1,
 					name = 'Show Continent',
@@ -106,37 +100,34 @@ local function InsertOptions()
 						return E.db.extradatatexts.datatexts.location.color ~= 'CUSTOM'
 					end
 				},
-			}
-		},
-
-		space1 = ACH:Spacer(10),
-		disableBlizzZoneText = {
-			order = 11,
-			name = 'Disable Blizzard Zone Text',
-			type = 'toggle',
-			set = function(_, value) E.db.extradatatexts.datatexts.location.disableBlizzZoneText = value E:StaticPopup_Show('CONFIG_RL') end
-		}
+				space1 = ACH:Spacer(10),
+				disableBlizzZoneText = {
+					order = 11,
+					name = 'Disable Blizzard Zone Text',
+					type = 'toggle',
+					set = function(_, value) E.db.extradatatexts.datatexts.location.disableBlizzZoneText = value E:StaticPopup_Show('CONFIG_RL') end
+				}
 	}
 
 
 
 end
 
-function EDT:Print(...)
-	(E.db and _G[E.db.general.messageRedirect] or _G.DEFAULT_CHAT_FRAME):AddMessage(strjoin('', '|cff1784d1', 'ElvUI|r', '_', '|cFFffffff', 'ExtraDataTexts:|r ', ...))
+function EDT:HideZoneText()
+	if E.db.extradatatexts.datatexts.location.disableBlizzZoneText then
+		if InCombatLockdown() then 
+			EDT:RegisterEvent('PLAYER_REGEN_ENABLED', EDT.HideZoneText)
+		else
+			EDT:UnregisterEvent('PLAYER_REGEN_ENABLED')
+			_G.ZoneTextFrame:UnregisterAllEvents()
+			_G.SubZoneTextFrame:UnregisterAllEvents()
+		end
+	end
 end
-
 
 function EDT:Initialize()
 
-	if E.db.extradatatexts.datatexts.location.disableBlizzZoneText then
-		if not InCombatLockdown() then
-			_G.ZoneTextFrame:UnregisterAllEvents()
-			_G.SubZoneTextFrame:UnregisterAllEvents()
-		else
-			EDT:Print('Unable to disable the Blizzard Zone Text popup due to being in combat. Please /rl when out of combat.')
-		end
-	end
+	EDT:HideZoneText()
 
 	EDT:RegisterEvent('ADDON_LOADED', function(_, arg1)
 		if arg1 == "ElvUI_OptionsUI" then
