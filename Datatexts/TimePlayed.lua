@@ -1,12 +1,14 @@
 -- Credit to Repooc and Darth Predator for this datatext from S&L
 
-local E, L, V, P, G, _ = unpack(ElvUI);
+local E = unpack(ElvUI);
 local DT = E:GetModule('DataTexts')
+local EDT = select(2, ...).EDT
+
 
 local format, GetTime, ChatFrame_TimeBreakDown, InCombatLockdown = format, GetTime, ChatFrame_TimeBreakDown, InCombatLockdown
 local PlayedTimeFormatFull = '%dd %dh %dm %ds'
 local PlayedTimeFormatNoDay = '%dh %dm %ds'
-local TotalPlayTime, LevelPlayTime, SessionPlayTime, LevelPlayedOffset, LastLevelTime, LevelPlayTimeOffset
+local TotalPlayTime, LevelPlayTime, SessionPlayTime, LastLevelTime, LevelPlayTimeOffset
 local MyRealm = GetRealmName();
 local MyName = UnitName('player')
 local MyClass = select(2, UnitClass('player'))
@@ -61,7 +63,7 @@ local OnUpdate = function(self, elapsed)
 	TimeSinceLastUpdate = TimeSinceLastUpdate + elapsed
 	if TimeSinceLastUpdate >= ONUPDATE_INTERVAL then
 		TimeSinceLastUpdate = 0
-		
+
 		if (not self.text) then
 			local text = self:CreateFontString(nil, 'OVERLAY')
 			text:SetFont(DataText.Font, DataText.Size, DataText.Flags)
@@ -118,7 +120,7 @@ local OnUpdate = function(self, elapsed)
 	end
 end
 
-local OnEvent = function(self, event, ...)
+local function OnEvent(_, event, ...)
 	if not ElvDB['ExtraDataTexts'] then ElvDB['ExtraDataTexts'] = {} end
 	if not ElvDB['ExtraDataTexts']['TimePlayed'] then ElvDB['ExtraDataTexts']['TimePlayed'] = {} end
 	if not ElvDB['ExtraDataTexts']['TimePlayed'][MyRealm] then ElvDB['ExtraDataTexts']['TimePlayed'][MyRealm] = {} end
@@ -147,9 +149,11 @@ local OnEvent = function(self, event, ...)
 		end
 	end
 	if event == 'PLAYER_LOGOUT' then
-		RequestTimePlayed()
+		if not IsAddOnLoaded('DataStore_Characters') then
+			RequestTimePlayed()
+		end
 	end
-	
+
 end
 
 local function Reset()
@@ -162,7 +166,7 @@ local function Reset()
 	print('Time Played has been reset!')
 end
 
-local OnMouseDown = function(self, button)
+local function OnMouseDown(_, button)
 	if button == 'RightButton' then
 		if IsShiftKeyDown()then
 			Reset()
@@ -171,10 +175,9 @@ local OnMouseDown = function(self, button)
 end
 
 local events = {
-	'ELVUI_FORCE_UPDATE',
 	'TIME_PLAYED_MSG',
 	'PLAYER_LEVEL_UP',
 	'PLAYER_LOGOUT',
 }
 
-DT:RegisterDatatext('Time Played', 'ExtraDataTexts', events, OnEvent, OnUpdate, OnMouseDown, OnEnter, OnLeave)
+DT:RegisterDatatext('Time Played', EDT.DTCategory, events, OnEvent, OnUpdate, OnMouseDown, OnEnter, OnLeave)

@@ -1,13 +1,12 @@
-local E, L, V, P, G = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
+local EDT = select(2, ...).EDT
+
 
 --Lua functions
-local select = select
-local format, join = string.format, string.join
-local ceil = math.ceil
 local format = string.format
 local tonumber = tonumber
-local tostring = tostring
+local ipairs = ipairs
 
 --WoW API / Variables
 local setCV = SetCVar
@@ -20,7 +19,6 @@ local Sound_GameSystem_GetOutputDriverNameByIndex = Sound_GameSystem_GetOutputDr
 local Sound_GameSystem_GetNumOutputDrivers = Sound_GameSystem_GetNumOutputDrivers
 local Sound_GameSystem_RestartSoundSystem = Sound_GameSystem_RestartSoundSystem
 
-local displayString = ''
 
 local volumeCVars =
 	{
@@ -56,7 +54,7 @@ local function OnEnter(self)
 
 	DT:SetupTooltip(self)
 	DT.tooltip:ClearLines()
-	
+
 	local audioDev = Sound_GameSystem_GetOutputDriverNameByIndex(getCV('Sound_OutputDriverIndex'))
 	--DT.tooltip:AddLine(format('|cffFFFFFFActive Output Audio Device|r: %s', audioDev))
 	DT.tooltip:AddLine('|cffFFFFFFActive Output Audio Device|r')
@@ -87,10 +85,10 @@ local function OnEvent(self, event, ...)
 
 		self:EnableMouseWheel(true)
 
-		self:SetScript('OnMouseWheel', function(tself, delta)
+		self:SetScript('OnMouseWheel', function(_, delta)
 			local vol = getCV(activeVolume.CVs.Volume);
 			local volScale = 100;
-			
+
 			if (IsShiftKeyDown()) then
 				volScale = 10;
 			end
@@ -102,10 +100,10 @@ local function OnEvent(self, event, ...)
 			elseif (vol <= 0) then
 				vol = 0
 			end
-		
+
 			setCV(activeVolume.CVs.Volume, vol, 'EDT_VOLUME_CHANGED')
 		end)
-		
+
 		OnEvent(self, 'CVAR_UPDATE', 'EDT_VOLUME_TEXT_CHANGE')
 		OnEvent(self, 'CVAR_UPDATE', 'EDT_VOLUME_STREAM_TOGGLE')
 		OnEvent(self, 'CVAR_UPDATE', 'EDT_OUTPUT_SOUND_DEVICE_CHANGED')
@@ -123,8 +121,8 @@ local function OnEvent(self, event, ...)
 				menu[i+1]={
 					text = volumeCVars[i].Name,
 					checked = i == activeVolumeIndex,
-					func = function(slf)
-						activeVolumeIndex = i; 
+					func = function()
+						activeVolumeIndex = i;
 						OnEvent(self, 'CVAR_UPDATE', 'EDT_VOLUME_TEXT_CHANGE');
 						OnEvent(self, 'CVAR_UPDATE', 'EDT_VOLUME_CHANGED', getCV(volumeCVars[i].CVs.Volume));
 					 end
@@ -136,7 +134,7 @@ local function OnEvent(self, event, ...)
 				toggleMenu[i + 1] = {
 					text = volumeCVars[i].Name,
 					checked = getCV(volumeCVars[i].CVs.Enabled) == '1',
-					func = function(slf)
+					func = function()
 						setCV(
 							volumeCVars[i].CVs.Enabled,
 							(not volumeCVars[i].Enabled) and '1' or '0',
@@ -154,7 +152,7 @@ local function OnEvent(self, event, ...)
 				local item = {
 					text = Sound_GameSystem_GetOutputDriverNameByIndex(i),
 					checked = i == activeIndex,
-					func = function(slf) setCV('Sound_OutputDriverIndex', i, 'EDT_OUTPUT_SOUND_DEVICE_CHANGED'); Sound_GameSystem_RestartSoundSystem(); end
+					func = function() setCV('Sound_OutputDriverIndex', i, 'EDT_OUTPUT_SOUND_DEVICE_CHANGED'); Sound_GameSystem_RestartSoundSystem(); end
 				}
 				menu[7 + i + 1] = item
 				toggleMenu[7 + i + 1] = item
@@ -175,24 +173,14 @@ local function OnClick(self, button)
 
 		DT:SetEasyMenuAnchor(DT.EasyMenu, self)
 		_G.EasyMenu(menu, DT.EasyMenu, nil, nil, nil, 'MENU')
-	elseif button == 'RightButton' then	
+	elseif button == 'RightButton' then
 		DT:SetEasyMenuAnchor(DT.EasyMenu, self)
 		_G.EasyMenu(toggleMenu, DT.EasyMenu, nil, nil, nil, 'MENU')
 	end
 end
 
-
-local function ValueColorUpdate()
-	displayString = strjoin('', '|cffFFFFFF%s:|r ')
-
-	if lastPanel then OnEvent(lastPanel) end
-end
-E.valueColorUpdateFuncs[ValueColorUpdate] = true
-
 local events = {
-	'PLAYER_ENTERING_WORLD',
-	'ELVUI_FORCE_UPDATE',
 	'CVAR_UPDATE'
 }
 
-DT:RegisterDatatext('Volume', 'ExtraDataTexts', events, OnEvent, nil, OnClick, OnEnter)
+DT:RegisterDatatext('Volume', EDT.DTCategory, events, OnEvent, nil, OnClick, OnEnter)

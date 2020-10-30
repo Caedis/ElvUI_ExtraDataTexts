@@ -1,8 +1,11 @@
-### Version 2.1.4 [ October/18th/2020 ]
+### Version 2.1.5 [ October/30th/2020 ]
 
 **New Additions:**  
+Location Datatext  
+ExtraDataTexts menu in the ElvUI Options for customizing datatexts
+Readded Heart Of Azeroth Datatext
 
 **Bug Fixes:**  
-[Time Played] Fixed an issue with it being stuck on Waiting
+
 
 **Misc. Changes:**  

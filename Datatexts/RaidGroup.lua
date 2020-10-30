@@ -1,7 +1,14 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E = unpack(ElvUI)
 local DT = E:GetModule('DataTexts')
+local EDT = select(2, ...).EDT
 
-local function OnEvent(self, event, unit)
+
+local IsInRaid = IsInRaid
+local GetNumGroupMembers = GetNumGroupMembers
+local GetRaidRosterInfo = GetRaidRosterInfo
+local UnitName = UnitName
+
+local function OnEvent(self)
 	if not IsInRaid() then self.text:SetText('Raid Group: N/A') return end
 	for i = 1, GetNumGroupMembers() do
 		local name, _, subgroup = GetRaidRosterInfo(i)
@@ -13,9 +20,7 @@ local function OnEvent(self, event, unit)
 end
 
 local events = {
-	'PLAYER_ENTERING_WORLD',
-	'ELVUI_FORCE_UPDATE',
 	'GROUP_ROSTER_UPDATE'
 }
 
-DT:RegisterDatatext('Raid Group', 'ExtraDataTexts', events, OnEvent)
+DT:RegisterDatatext('Raid Group', EDT.DTCategory, events, OnEvent)
