@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 <Script file='CombatIndicator.lua'/>
 <Script file='EquipmentSets.lua'/>
+<Script file='HeartOfAzeroth.lua'/>
 <Script file='Location.lua'/>
 <Script file='RaidGroup.lua'/>
 <Script file='TimePlayed.lua'/>
