@@ -1,4 +1,4 @@
-local addonName = ...
+local addonName, Engine = ...
 local E, L, _, P = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local EDT = E:NewModule(addonName, 'AceEvent-3.0', 'AceConsole-3.0');
 local DT = E:GetModule('DataTexts')
@@ -6,8 +6,9 @@ local EP = LibStub("LibElvUIPlugin-1.0");
 local format, strjoin, strlower = string.format, strjoin, strlower
 local GetAddOnMetadata = GetAddOnMetadata
 local InCombatLockdown = InCombatLockdown
+Engine.EDT = EDT
 
-
+EDT.DTCategory = 'ExtraDataTexts'
 
 
 

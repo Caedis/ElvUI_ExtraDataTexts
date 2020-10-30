@@ -1,5 +1,7 @@
 local E, L, V, P, G, _ = unpack(ElvUI)
 local DT = E:GetModule('DataTexts')
+local EDT = select(2, ...).EDT
+
 
 --Cache global variables
 --Lua functions
@@ -90,4 +92,4 @@ local events = {
     'PLAYER_FLAGS_CHANGED'
 }
 
-DT:RegisterDatatext('War Mode', 'ExtraDataTexts', events, OnEvent, nil, OnClick, OnEnter)
+DT:RegisterDatatext('War Mode', EDT.DTCategory, events, OnEvent, nil, OnClick, OnEnter)

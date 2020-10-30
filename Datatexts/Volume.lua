@@ -1,5 +1,7 @@
 local E = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
+local EDT = select(2, ...).EDT
+
 
 --Lua functions
 local format = string.format
@@ -181,4 +183,4 @@ local events = {
 	'CVAR_UPDATE'
 }
 
-DT:RegisterDatatext('Volume', 'ExtraDataTexts', events, OnEvent, nil, OnClick, OnEnter)
+DT:RegisterDatatext('Volume', EDT.DTCategory, events, OnEvent, nil, OnClick, OnEnter)

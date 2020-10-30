@@ -1,5 +1,7 @@
 local E = unpack(ElvUI)
 local DT = E:GetModule('DataTexts')
+local EDT = select(2, ...).EDT
+
 
 local IsInRaid = IsInRaid
 local GetNumGroupMembers = GetNumGroupMembers
@@ -21,4 +23,4 @@ local events = {
 	'GROUP_ROSTER_UPDATE'
 }
 
-DT:RegisterDatatext('Raid Group', 'ExtraDataTexts', events, OnEvent)
+DT:RegisterDatatext('Raid Group', EDT.DTCategory, events, OnEvent)

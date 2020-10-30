@@ -1,5 +1,7 @@
 local E, L, _, P = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
+local EDT = select(2, ...).EDT
+
 
 --WoW API caching
 local WrapTextInColorCode = WrapTextInColorCode
@@ -100,4 +102,4 @@ local events = {
 	'ZONE_CHANGED'
 }
 
-DT:RegisterDatatext(L['Location'], 'ExtraDataTexts', events, OnEvent, nil, OnClick, OnEnter)
+DT:RegisterDatatext(L['Location'], EDT.DTCategory, events, OnEvent, nil, OnClick, OnEnter)

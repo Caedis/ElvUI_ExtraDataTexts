@@ -2,6 +2,8 @@
 
 local E = unpack(ElvUI);
 local DT = E:GetModule('DataTexts')
+local EDT = select(2, ...).EDT
+
 
 local format, GetTime, ChatFrame_TimeBreakDown, InCombatLockdown = format, GetTime, ChatFrame_TimeBreakDown, InCombatLockdown
 local PlayedTimeFormatFull = '%dd %dh %dm %ds'
@@ -178,4 +180,4 @@ local events = {
 	'PLAYER_LOGOUT',
 }
 
-DT:RegisterDatatext('Time Played', 'ExtraDataTexts', events, OnEvent, OnUpdate, OnMouseDown, OnEnter, OnLeave)
+DT:RegisterDatatext('Time Played', EDT.DTCategory, events, OnEvent, OnUpdate, OnMouseDown, OnEnter, OnLeave)

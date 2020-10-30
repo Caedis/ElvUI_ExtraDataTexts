@@ -1,5 +1,7 @@
 local E = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
+local EDT = select(2, ...).EDT
+
 local format = format
 
 local function OnEvent(self, event)
@@ -32,5 +34,5 @@ local events = {
 	'PLAYER_REGEN_DISABLED'
 }
 
-DT:RegisterDatatext('Combat Indicator', 'ExtraDataTexts', events, OnEvent)
+DT:RegisterDatatext('Combat Indicator', EDT.DTCategory, events, OnEvent)
 

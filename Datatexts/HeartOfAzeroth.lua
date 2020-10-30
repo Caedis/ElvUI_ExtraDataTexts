@@ -1,5 +1,6 @@
 local E, L, V, P, G, _ =  unpack(ElvUI);
 local DT = E:GetModule('DataTexts')
+local EDT = select(2, ...).EDT
 
 
 --Cache global variables
@@ -12,6 +13,7 @@ local C_AzeriteItem_GetAzeriteItemXPInfo = C_AzeriteItem.GetAzeriteItemXPInfo
 local C_AzeriteItem_GetPowerLevel = C_AzeriteItem.GetPowerLevel
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItem = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItem
 local C_Item_DoesItemExist = C_Item.DoesItemExist
+local OpenAzeriteEmpoweredItemUIFromItemLocation = OpenAzeriteEmpoweredItemUIFromItemLocation
 
 local InCombatLockdown = InCombatLockdown
 local GetInventorySlotInfo = GetInventorySlotInfo
@@ -19,21 +21,19 @@ local GetInventoryItemID = GetInventoryItemID
 local GetItemInfo = GetItemInfo
 local GetItemIcon = GetItemIcon
 local Item = Item
+local ItemLocation = ItemLocation
 local ARTIFACT_POWER = ARTIFACT_POWER
 local AZERITE_POWER_TOOLTIP_BODY = AZERITE_POWER_TOOLTIP_BODY
 local AZERITE_POWER_TOOLTIP_TITLE = AZERITE_POWER_TOOLTIP_TITLE
 
 local menuFrame = CreateFrame("Frame", "AzeriteItemsDatatextClickMenu", E.UIParent, "UIDropDownMenuTemplate")
-azeriteItemsList = {
+local azeriteItemsList = {
     { text = 'Select Azerite Item', isTitle = true, notCheckable = true },
 	{ slot = 'HeadSlot', textTemplate = 'Helm: %s', notCheckable = true },
 	{ slot = 'ShoulderSlot', textTemplate = 'Shoulders: %s', notCheckable = true },
 	{ slot = 'ChestSlot', textTemplate = 'Chest: %s', notCheckable = true }
 }
 
---for equipSlotIndex, itemLocation in AzeriteUtil.EnumerateEquipedAzeriteEmpoweredItems() do
---    OpenAzeriteEmpoweredItemUIFromItemLocation(itemLocation)
---end
 
 local shortNum = function(v)
 	if v <= 999 then
@@ -85,7 +85,7 @@ local function OnEnter(self)
 end
 
 --azeriteItemsList
-function OnClick(self, button)
+local function OnClick(self, button)
 
     if button == "LeftButton" then
 		DT.tooltip:Hide()
@@ -112,7 +112,7 @@ function OnClick(self, button)
             end
         end
 
-        EasyMenu(azeriteItemsList, menuFrame, "cursor", -15, -7, "MENU", 2);
+        _G.EasyMenu(azeriteItemsList, menuFrame, "cursor", -15, -7, "MENU", 2);
     end
 
 end
@@ -132,9 +132,6 @@ local function OnEvent(self, event, unit)
 	local currentLevel = C_AzeriteItem_GetPowerLevel(azeriteItemLocation); 
 
 	self.text:SetText(format('|cffe6cc80AP|r: %s/%s (%.0f%%)', shortNum(xp), shortNum(totalXP), xp/totalXP * 100))
-
-	
-	lastPanel = self
 end
 
 
@@ -152,5 +149,5 @@ local events = {
 	click - function to fire when clicking the datatext
 	onEnterFunc - function to fire OnEnter
 ]]
-DT:RegisterDatatext('Azerite', events, OnEvent, nil, OnClick, OnEnter)
+DT:RegisterDatatext('Azerite', EDT.DTCategory, events, OnEvent, nil, OnClick, OnEnter)
 

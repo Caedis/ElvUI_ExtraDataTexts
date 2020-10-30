@@ -1,5 +1,7 @@
 local E = unpack(ElvUI)
 local DT = E:GetModule('DataTexts')
+local EDT = select(2, ...).EDT
+
 
 --Cache global variables
 local _G = _G
@@ -120,4 +122,4 @@ local events = {
 }
 
 
-DT:RegisterDatatext('Equipment Sets', 'ExtraDataTexts', events, OnEvent, nil, OnClick, OnEnter, nil, nil, nil, ValueColorUpdate)
+DT:RegisterDatatext('Equipment Sets', EDT.DTCategory, events, OnEvent, nil, OnClick, OnEnter, nil, nil, nil, ValueColorUpdate)
