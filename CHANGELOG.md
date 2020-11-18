@@ -1,4 +1,4 @@
-### Version 2.1.5 [ October/30th/2020 ]
+### Version 2.1.6 [ November/18th/2020 ]
 
 **New Additions:**  
 Location Datatext  
@@ -7,5 +7,5 @@ Readded Heart Of Azeroth Datatext
 
 **Bug Fixes:**  
 
-
 **Misc. Changes:**  
+TOC Bump for 9.0.2

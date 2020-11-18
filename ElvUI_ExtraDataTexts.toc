@@ -1,9 +1,9 @@
-## Interface: 90001
+## Interface: 90002
 ## Title: |cff1784d1ElvUI |rExtraDataTexts
 ## Author: Caedis
 ## URL: https://www.curseforge.com/wow/addons/elvui_extradatatexts
 ## URL: https://www.tukui.org/addons.php?id=66
-## Version: 2.1.5
+## Version: 2.1.6
 ## RequiredDeps: ElvUI
 ## DefaultState: Enabled
 ## LoadOnDemand: 0

@@ -12,36 +12,22 @@ local IsInInstance = IsInInstance
 
 local mapInfo = E.MapInfo
 
+local colors = {
+	["arena"] = {r = 1, g = 0.1, b = 0.1},
+	["combat"] = {r = 1, g = 0.1, b = 0.1},
+	["contested"] = {r = 1, g = 0.7, b = 0.10},
+	["friendly"] = {r = 0.1, g = 1, b = 0.1},
+	["hostile"] = {r = 1, g = 0.1, b = 0.1},
+	["instance"] = {r = 1, g = 0.1, b =  0.1},
+	["sanctuary"] = {r = 0.41, g = 0.8, b = 0.94},
+}
 
---credit LocationPlus by Benik and Blizz's ZoneText.lua
 local function GetStatus()
 	local pvpType = GetZonePVPInfo()
 	local inInstance = IsInInstance()
-	local r, g, b
 
-	if (pvpType == "sanctuary") then
-		r, g, b = 0.41, 0.8, 0.94
-	elseif(pvpType == "arena") then
-		r, g, b = 1, 0.1, 0.1
-	elseif(pvpType == "friendly") then
-		r, g, b = 0.1, 1, 0.1
-	elseif(pvpType == "hostile") then
-		r, g, b = 1, 0.1, 0.1
-	elseif(pvpType == "contested") then
-		r, g, b = 1, 0.7, 0
-	elseif(pvpType == "combat" ) then
-		r, g, b = 1, 0.1, 0.1
-	elseif inInstance then
-		r, g, b = 1, 0.1, 0.1
-	else
-		r, g, b = 1.0, 0.93, 0.76
-	end
-
-	return {r = r, g = g, b = b}
+	return inInstance and colors["instance"] or colors[pvpType] or {r = 1, g = 1, b = 0}
 end
-
-
-
 
 local function OnEvent(self)
 	if not mapInfo.mapID then
@@ -53,19 +39,17 @@ local function OnEvent(self)
 
 	local text
 
-	if db.showSubZone then
-		text = mapInfo.subZoneText
+	if db.showContinent then
+		text = mapInfo.continentName
 	end
 
 	if db.showZone then
-		text = text and (text .. ', ' .. mapInfo.zoneText) or mapInfo.zoneText
+		text = text and (text .. ': ' .. mapInfo.zoneText) or mapInfo.zoneText
 	end
 
-	if db.showContinent then
-		text = text and (text .. ', ' .. mapInfo.continentName) or mapInfo.continentName
+	if db.showSubZone then
+		text = text and (text .. ': ' .. mapInfo.subZoneText) or mapInfo.subZoneText
 	end
-
-
 
 	local color = db.customColor or P.extradatatexts.datatexts.customColor
 	if db.color == 'CLASS' then
