@@ -69,6 +69,7 @@ local function OnEnter(self)
 
 
 	DT.tooltip:AddLine('|cffFFFFFFLeft Click:|r Select Volume Stream')
+	DT.tooltip:AddLine('|cffFFFFFFMiddle Click:|r Toggle Mute Master Stream')
 	DT.tooltip:AddLine('|cffFFFFFFRight Click:|r Toggle Volume Stream')
 	DT.tooltip:AddLine('|cffFFFFFFBoth:|r Select Output Audio Device')
 	DT.tooltip:AddLine('|cffFFFFFFShift + Left Click:|r Open System Audio Panel')
@@ -173,6 +174,9 @@ local function OnClick(self, button)
 
 		DT:SetEasyMenuAnchor(DT.EasyMenu, self)
 		_G.EasyMenu(menu, DT.EasyMenu, nil, nil, nil, 'MENU')
+	elseif button == 'MiddleButton' then
+		setCV(volumeCVars[1].CVs.Enabled, (not volumeCVars[1].Enabled) and '1' or '0', 'EDT_VOLUME_STREAM_TOGGLE')
+		OnEvent(self, 'CVAR_UPDATE', 'EDT_VOLUME_CHANGED', getCV(activeVolume.CVs.Volume));
 	elseif button == 'RightButton' then
 		DT:SetEasyMenuAnchor(DT.EasyMenu, self)
 		_G.EasyMenu(toggleMenu, DT.EasyMenu, nil, nil, nil, 'MENU')
