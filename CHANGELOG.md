@@ -1,8 +1,9 @@
-### Version 2.1.6 [ November/18th/2020 ]
+### Version 2.1.7 [ November/26th/2020 ]
 
 **New Additions:**  
 
 **Bug Fixes:**  
 
 **Misc. Changes:**  
-TOC Bump for 9.0.2
+Couple bug fixes in the location datatext.  
+Moved Volume datatext to ElvUI
