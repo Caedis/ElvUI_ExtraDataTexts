@@ -6,4 +6,4 @@
 
 **Misc. Changes:**  
 Couple bug fixes in the location datatext.  
-Moved Volume datatext to ElvUI
+Moved Volume datatext to base ElvUI
