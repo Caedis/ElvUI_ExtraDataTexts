@@ -4,6 +4,5 @@
 <Script file='Location.lua'/>
 <Script file='RaidGroup.lua'/>
 <Script file='TimePlayed.lua'/>
-<Script file='Volume.lua'/>
 <Script file='Warmode.lua'/>
 </Ui>
